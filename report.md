@@ -17,10 +17,11 @@ The goals / steps of this project are the following:
 [image2]: ./output_images/img4.png "Road"
 [image3]: ./output_images/undist_img4.png "undistorted"
 [image4]: ./output_images/binary_img4.png "Binary Example"
-[image5]: ./examples/warped_straight_lines.jpg "Warp Example"
-[image6]: ./examples/color_fit_lines.jpg "Fit Visual"
-[image7]: ./examples/example_output.jpg "Output"
-
+[image5]: ./output_images/img1.png "original Example"
+[image6]: ./output_images/perspective_img1.png "perspective"
+[image7]: ./output_images/binaryPerspective_img1.png "binaryLine"
+[image8]: ./output_images/line.png "line"
+[image9]: ./output_images/line_img1.png "final"
 [video1]: ./project_video.mp4 "Video"
 
 ## [Rubric](https://review.udacity.com/#!/rubrics/571/view) Points
@@ -57,39 +58,59 @@ I used a combination of color and gradient thresholds to generate a binary image
 
 ####3. Describe how (and identify where in your code) you performed a perspective transform and provide an example of a transformed image.
 
-The code for my perspective transform includes a function called `warper()`, which appears in lines 1 through 8 in the file `example.py` (output_images/examples/example.py) (or, for example, in the 3rd code cell of the IPython notebook).  The `warper()` function takes as inputs an image (`img`), as well as source (`src`) and destination (`dst`) points.  I chose the hardcode the source and destination points in the following manner:
+The code for my perspective transform is in the 8th code cell of the IPython notebook `advanced_laneDetection`.  In this cell,  set up source (`src`) points and destination (`dst`) points.  I chose the hardcode the source and destination points in the following manner:
 
 ```
+nx = 1280
+ny = 720
+xOffset = 20
+yOffset = 20
+
 src = np.float32(
-    [[(img_size[0] / 2) - 55, img_size[1] / 2 + 100],
-    [((img_size[0] / 6) - 10), img_size[1]],
-    [(img_size[0] * 5 / 6) + 60, img_size[1]],
-    [(img_size[0] / 2 + 55), img_size[1] / 2 + 100]])
+	[[580,450],
+    [710,450],
+    [1200,700],
+    [100,700]])
+
 dst = np.float32(
-    [[(img_size[0] / 4), 0],
-    [(img_size[0] / 4), img_size[1]],
-    [(img_size[0] * 3 / 4), img_size[1]],
-    [(img_size[0] * 3 / 4), 0]])
+	[[xOffset,yOffset],
+    [ny-xOffset,yOffset],
+    [ny-xOffset, nx],
+    [xOffset,nx]])
 
 ```
 This resulted in the following source and destination points:
 
 | Source        | Destination   | 
 |:-------------:|:-------------:| 
-| 585, 460      | 320, 0        | 
-| 203, 720      | 320, 720      |
-| 1127, 720     | 960, 720      |
-| 695, 460      | 960, 0        |
+| 580, 450      | 20, 20        | 
+| 710, 450      | 700, 20      |
+| 1200, 700     | 700, 1280      |
+| 100, 700      | 20, 1280        |
 
 I verified that my perspective transform was working as expected by drawing the `src` and `dst` points onto a test image and its warped counterpart to verify that the lines appear parallel in the warped image.
 
-![alt text][image4]
-
+![alt text][image5]
+![alt_text][image6]
 ####4. Describe how (and identify where in your code) you identified lane-line pixels and fit their positions with a polynomial?
 
-Then I did some other stuff and fit my lane lines with a 2nd order polynomial kinda like this:
+The sequence I did is to do the gradient combination to get the binary image first and then do the perspective transoformation.This is the result:
 
-![alt text][image5]
+![alt text][image7]
+
+Then I use slide windows to find the peaks of each windows and store the data in `leftx`, `lefty` and `rightx`, `righty`. 
+
+Then apply the function `np.polyfit` to fit the left line and right line. The parameters are stored in `left_fix` and `right_fit`. 
+
+In last step, `ploty` is the uniform sample in y direction and `left_fix`, `right_fix` are the values returned from the polynoimals of left and right at `ploty`
+Here is the result of this step:
+
+![alt_text][image8]
+
+The yellow lines are the lane marking we found in bird angle. 
+
+
+
 
 ####5. Describe how (and identify where in your code) you calculated the radius of curvature of the lane and the position of the vehicle with respect to center.
 
@@ -97,9 +118,10 @@ I did this in lines # through # in my code in `my_other_file.py`
 
 ####6. Provide an example image of your result plotted back down onto the road such that the lane area is identified clearly.
 
-I implemented this step in lines # through # in my code in `yet_another_file.py` in the function `map_lane()`.  Here is an example of my result on a test image:
+I implemented this step in lines # through # in my code in `yet_another_file.py` in the function `map_lane()`.  
+Last step, apply inverse matrix to transfer bird angle image to the original image and draw lines on it. Here is the result:
 
-![alt text][image6]
+![alt_text][image9]
 
 ---
 
