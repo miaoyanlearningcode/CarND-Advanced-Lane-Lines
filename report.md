@@ -142,5 +142,18 @@ Here's a [link to my video result](./project_laneDetection.mp4)
 
 ####1. Briefly discuss any problems / issues you faced in your implementation of this project.  Where will your pipeline likely fail?  What could you do to make it more robust?
 
+The problems I faced:
 
+a. Using eye to check the persective transformation may lead to some incorrect transfer;
 
+b. Using only left lane to calcuate the curvature may lead to the wrong curvature. 
+
+The failure situations may include:
+
+a. lane marking is not clear;
+
+b. light changes dramatically;
+
+c. zigzag lanes
+
+To improve it, adding tracking is one way, like mentioned in the class. Also it is better for us to classify the lane type, such as single lane, double lane, dash lane, so that we could figure out the real lane center but not center of a lot points. 
