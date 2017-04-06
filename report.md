@@ -22,7 +22,7 @@ The goals / steps of this project are the following:
 [image7]: ./output_images/binaryPerspective_img1.png "binaryLine"
 [image8]: ./output_images/line.png "line"
 [image9]: ./output_images/line_img1.png "final"
-[video1]: ./project_video.mp4 "Video"
+[video1]: ./project_laneDetection.mp4 "Video"
 
 ## [Rubric](https://review.udacity.com/#!/rubrics/571/view) Points
 ###Here I will consider the rubric points individually and describe how I addressed each point in my implementation.  
@@ -114,12 +114,17 @@ The yellow lines are the lane marking we found in bird angle.
 
 ####5. Describe how (and identify where in your code) you calculated the radius of curvature of the lane and the position of the vehicle with respect to center.
 
-I did this in lines # through # in my code in `my_other_file.py`
+I did this in cell 12. 
+First, I know the road width is usually 3.7m and I checked the road width in image, which is 503 pixels. And assume the lenght of dash line is 3.0 meter and in image, the length is 185 pixels. So in x direction, meter per pixel is 0.00735 and in y direction, meter per pixel is 0.0162.
+
+Knowing this, transfer the data of left markings from image to the real world and polyfit again to get the parameters of polymonial. Then use the equation given in the class to calcuate the curvature.
+
+For the offset of center, calcuate the center of left lane and right lane in image. The offset in image is `(center of image) - (center of lane found)` and multiply this result with meter per pixel in x direciton. 
 
 ####6. Provide an example image of your result plotted back down onto the road such that the lane area is identified clearly.
 
-I implemented this step in lines # through # in my code in `yet_another_file.py` in the function `map_lane()`.  
-Last step, apply inverse matrix to transfer bird angle image to the original image and draw lines on it. Here is the result:
+I implemented this step in cell 13. 
+It is the last step. Apply inverse matrix to transfer bird angle image to the original image and draw lines on it. Here is the result:
 
 ![alt_text][image9]
 
@@ -129,7 +134,7 @@ Last step, apply inverse matrix to transfer bird angle image to the original ima
 
 ####1. Provide a link to your final video output.  Your pipeline should perform reasonably well on the entire project video (wobbly lines are ok but no catastrophic failures that would cause the car to drive off the road!).
 
-Here's a [link to my video result](./project_video.mp4)
+Here's a [link to my video result](./project_laneDetection.mp4)
 
 ---
 
@@ -137,5 +142,5 @@ Here's a [link to my video result](./project_video.mp4)
 
 ####1. Briefly discuss any problems / issues you faced in your implementation of this project.  Where will your pipeline likely fail?  What could you do to make it more robust?
 
-Here I'll talk about the approach I took, what techniques I used, what worked and why, where the pipeline might fail and how I might improve it if I were going to pursue this project further.  
+
 
